@@ -18,7 +18,7 @@ app.get("/users", async (req, res) => {
   res.send(data);
 });
 app.post("/addUser", async (req, res) => {
-  const user = {};
+  const user = {}; 
   user.name = req.body.name;
   user.pwd = req.body.pwd;
   try {
