@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./AllUsers.css"; // Assuming you're using CSS modules or a global stylesheet
+
 export default function AllUsers() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [editingUser, setEditingUser] = useState(null); // State to track the user being edited
   const [editForm, setEditForm] = useState({ name: "", pwd: "" }); // State for the edit form
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/users")
@@ -16,6 +19,7 @@ export default function AllUsers() {
         setError(true);
       });
   }, [users]);
+
   const delUser = (user) => {
     axios
       .delete(`http://localhost:5000/users/${user._id}`)
@@ -26,10 +30,12 @@ export default function AllUsers() {
         console.log("Server error " + err);
       });
   };
+
   const startEditUser = (user) => {
     setEditingUser(user._id);
     setEditForm({ name: user.name, pwd: "" });
   };
+
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prevForm) => ({ ...prevForm, [name]: value }));
@@ -49,23 +55,28 @@ export default function AllUsers() {
         console.log("Server error " + err);
       });
   };
+
   return (
-    <div>
+    <div className="container">
       {!error ? (
-        <ol>
+        <ol className="user-list">
           {users.map((user) => (
-            <li key={user._id}>
-              {user.name}{" "}
-              <button onClick={() => startEditUser(user)}>Edit</button>{" "}
-              <button onClick={() => delUser(user)}>Delete</button>
+            <li key={user._id} className="user-item">
+              <span className="user-name">{user.name}</span>
+              <button className="edit-btn" onClick={() => startEditUser(user)}>
+                Edit
+              </button>
+              <button className="delete-btn" onClick={() => delUser(user)}>
+                Delete
+              </button>
             </li>
           ))}
         </ol>
       ) : (
-        <p>Internal server error!</p>
+        <p className="error-message">Internal server error!</p>
       )}
       {editingUser && (
-        <form onSubmit={handleEditSubmit}>
+        <form onSubmit={handleEditSubmit} className="edit-form">
           <h2>Edit User</h2>
           <label>
             Name:
@@ -74,6 +85,7 @@ export default function AllUsers() {
               name="name"
               value={editForm.name}
               onChange={handleEditChange}
+              className="form-input"
             />
           </label>
           <br />
@@ -84,11 +96,20 @@ export default function AllUsers() {
               name="pwd"
               value={editForm.pwd}
               onChange={handleEditChange}
+              className="form-input"
             />
           </label>
           <br />
-          <button type="submit">Update</button>
-          <button onClick={() => setEditingUser(null)}>Cancel</button>
+          <button type="submit" className="submit-btn">
+            Update
+          </button>
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() => setEditingUser(null)}
+          >
+            Cancel
+          </button>
         </form>
       )}
     </div>
