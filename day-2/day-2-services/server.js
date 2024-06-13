@@ -41,7 +41,7 @@ app.delete("/users/:id", (req, res) => {
     });
 });
 app.put("/users/:id", async (req, res) => {
-  const response = await db.findByIdAndUpdate(req.params.id, {
+  const response = await db.findByIdAndUpdate(req.params.id,  {
     name: req.body.name,
     pwd: req.body.name,
   });
