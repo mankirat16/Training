@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Welcome to dashboard</h2>
+    <br />
+    <button id="btn">Log Out</button>
+  </body>
+  <script>
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", () => {
+      window.location.href = "/logout";
+    });
+  </script>
+</html>

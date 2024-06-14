@@ -4,42 +4,35 @@
 // const PORT = process.env.PORT || 5000;
 // const app = express();
 // const cors = require("cors");
-// const session = require("express-session");
 // const cookieParser = require("cookie-parser");
 // const path = require("path");
+// const jwt = require("jsonwebtoken");
 // app.use(cors());
 // app.use(express.urlencoded());
 // app.use(express.static("."));
 // app.use(express.json());
 // app.use(cookieParser());
 // app.use(express.static("./public"));
-
-// app.use(
-//   session({
-//     saveUninitialized: true,
-//     resave: false,
-//     secret: "asdf1323f3f2f",
-//     cookie: { maxAge: 400000 },
-//   })
-// );
+// const secret = process.env.TOKEN_SECRET;
 // mongoose.connect(process.env.DB_URL).then((res) => {
 //   console.log("connected");
 // });
 // const db = require("./models/users");
 // app.get("/", (req, res) => {
-//   if (req.session.username) res.redirect("/dashboard   ");
 //   res.sendFile(path.join(__dirname, "public/login.html"));
 // });
 // app.get("/dashboard", (req, res) => {
-//   if (req.session.name)
-//     res.sendFile(path.join(__dirname, "public/dashboard.html"));
+//   let verify;
+//   if (req.cookies.user) verify = jwt.verify(req.cookies.user, secret);
+//   if (verify) res.sendFile(path.join(__dirname, "public/dashboard.html"));
 //   else res.redirect("/");
 // });
 // app.post("/login", async (req, res) => {
 //   const user = await db.find({ name: req.body.name }, { pwd: req.body.pwd });
 //   if (user.length === 0) res.send("Invalid username or password");
 //   else {
-//     req.session.name = req.body.name;
+//     const token = jwt.sign({ ...user[0] }, secret);
+//     res.cookie("user", token);
 //     res.redirect("/dashboard");
 //   }
 // });
@@ -48,18 +41,20 @@
 //   user.name = req.body.name;
 //   user.pwd = req.body.pwd;
 //   const oldUser = await db.find({ name: req.body.name });
+//   const token = jwt.sign({ ...oldUser[0] }, secret);
 //   if (oldUser.length != 0) {
+//     res.cookie("user", token);
 //     res.redirect("/");
 //   } else {
+//     res.cookie("user", token);
 //     const userMade = await db.create(user);
 //     if (userMade) {
-//       req.session.name = req.body.name;
 //       res.redirect("/dashboard");
 //     }
 //   }
 // });
 // app.get("/logout", (req, res) => {
-//   req.session.destroy();
+//   res.clearCookie("user");
 //   res.redirect("/");
 // });
 // app.listen(PORT, (err) => {
@@ -69,62 +64,71 @@
 //   }
 // });
 
-//--------------------------------------------> using cookies i.e without using express-session package
-
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 5000;
 const app = express();
 const cors = require("cors");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.urlencoded());
 app.use(express.static("."));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static("./public"));
-
-app.use(
-  session({
-    saveUninitialized: true,
-    resave: false,
-    secret: "asdf1323f3f2f",
-    cookie: { maxAge: 400000 },
-  })
-);
+const secret = process.env.TOKEN_SECRET;
 mongoose.connect(process.env.DB_URL).then((res) => {
   console.log("connected");
 });
 const db = require("./models/users");
+const { send } = require("process");
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/login.html"));
 });
+function authToken(req, res, next) {
+  const headers = req.headers["headers"];
+  const token = headers && headers.split("")[1];
+  if (token == null) res.sendStatus(401);
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      res.send(401);
+      return;
+    }
+    req.user = user;
+    next();
+  });
+}
 app.get("/dashboard", (req, res) => {
-  if (req.cookies.user)
-    res.sendFile(path.join(__dirname, "public/dashboard.html"));
+  let verify;
+  if (req.cookies.user) verify = jwt.verify(req.cookies.user, secret);
+  if (verify) res.sendFile(path.join(__dirname, "public/dashboard.html"));     
   else res.redirect("/");
 });
+app.get('/posts',authToken,(req,res)=>{
+          
+})
 app.post("/login", async (req, res) => {
   const user = await db.find({ name: req.body.name }, { pwd: req.body.pwd });
   if (user.length === 0) res.send("Invalid username or password");
   else {
-    res.cookie("user", req.body.name);
-    res.redirect("/dashboard");
+    const token = jwt.sign({ ...user[0] }, secret);
+    res.json({ token: token });
   }
-});  
+});
 app.post("/signup", async (req, res) => {
   const user = {};
-  user.name = req.body.name;   
+  user.name = req.body.name;
   user.pwd = req.body.pwd;
   const oldUser = await db.find({ name: req.body.name });
+  const token = jwt.sign({ ...oldUser[0] }, secret);
   if (oldUser.length != 0) {
-    res.cookie("user", req.body.name);
+    res.cookie("user", token);
     res.redirect("/");
   } else {
-    res.cookie("user", req.body.name);
+    res.cookie("user", token);
     const userMade = await db.create(user);
     if (userMade) {
       res.redirect("/dashboard");
