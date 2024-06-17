@@ -1,0 +1,3 @@
+multer =>  makes the process of uploading files to a server easier 
+works only on input type multipart/form-data
+enctype attribute determines how the fle must be encoded before it is sent to the server        
