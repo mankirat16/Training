@@ -14,7 +14,7 @@ app.use(express.static("."));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static("./public"));
-const storage = multer.diskStorage({
+const storage = multer.diskStorage({      
   destination: (req, file, cb) => {
     cb(null, "./uploads");
   },
