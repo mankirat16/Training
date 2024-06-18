@@ -10,9 +10,11 @@ make a DB_PWD field in the .env and write the password you put while setting up 
 make a PORT field , set the PORT field to 5000
 
 ### go to terminal of project, run the following commands
+```
 cd day-6-services
 npm i
 npm start
+```
 
 ### open another tab of cmd on vs code and run the folowing commands
 ```
