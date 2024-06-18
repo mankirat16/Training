@@ -7,6 +7,8 @@ set port as 5433
 
 ```
 open psql on your machine
+enter port as 5433
+enter password which you entered while setting up postgres on your machine
 CREATE TABLE students;
 \c students
 INSERT INTO students (name , email , age , dob) VALUES ('joe' , 'xyz@gmail.com' ,21 , '16-08-2003');
