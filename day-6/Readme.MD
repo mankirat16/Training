@@ -6,7 +6,7 @@ set up password and username of the database
 set port as 5433
 
 ```
-open pgAdmin on your machine
+open psql on your machine
 CREATE TABLE students;
 \c students
 INSERT INTO students (name , email , age , dob) VALUES ('joe' , 'xyz@gmail.com' ,21 , '16-08-2003');
