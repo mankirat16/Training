@@ -14,7 +14,9 @@ cd day-6-services
 npm i
 npm start
 
-### open another tab of cmd on vs code and run the foloowing commands
+### open another tab of cmd on vs code and run the folowing commands
+```
 cd day-6-frontend
 npm i
 npm start
+```
