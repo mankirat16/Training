@@ -26,6 +26,13 @@ app.get("/users", async (req, res) => {
   const data = await pool.query(getAllQuery);
   res.send(data.rows);
 });
+app.get("/posts/:id", async (req, res) => {
+  const userId = req.params.id;
+  const query = `SELECT * FROM students WHERE id = $1`;
+  const img = await pool.query(query, [userId]);
+  console.log(img.rows[0].image);
+  res.send(img.rows[0]);
+});
 app.post("/addUser", upload.single("file"), async (req, res) => {
   console.log(req.file);
   const user = {};
