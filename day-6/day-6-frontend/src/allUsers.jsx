@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./AllUsers.css"; // Assuming you're using CSS modules or a global stylesheet
+import { useNavigate } from "react-router-dom";
+const bufferToArray = (buffer) => {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  var base64Image = window.btoa(binary, "src");
+  return `data:image/jpeg;base64,${base64Image}`;
+};
 
 export default function AllUsers() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [editingUser, setEditingUser] = useState(null); // State to track the user being edited
@@ -63,21 +75,27 @@ export default function AllUsers() {
           {users.map((user) => (
             <li key={user._id} className="user-item">
               <span className="user-name">{user.name}</span>
+
+              {/* {console.log(bufferToArray(user.image.data))} */}
+              <span className="user-name">
+                {/* <img
+                  src={bufferToArray(user.image.data)}
+                  width={100}
+                  height={100}
+                /> */}
+
+              </span>
               <button className="edit-btn" onClick={() => startEditUser(user)}>
                 Edit
               </button>
-              <button className="delete-btn" onClick={() => delUser(user)}>
+              <button className="delete-btn" onClick={() => delUser(user)}> 
                 Delete
               </button>
-              <div
-                style={{
-                  maxHeight: "40px",
-                  maxWidth: "40px",
-                  border: "2px solid black",
-                }}
-              >
-                
-              </div>
+              <button className="btn btn-outline-info" onClick={()=>{
+                navigate(`/posts/${user.id}`)
+              }}> 
+                View all posts
+              </button>
             </li>
           ))}
         </ol>

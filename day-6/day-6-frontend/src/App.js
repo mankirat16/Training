@@ -4,7 +4,7 @@ import axios from "axios";
 import AllUsers from "./allUsers";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Post from "./post";
 function App() {
   const [formData, setFormData] = useState({ name: "", pwd: "" });
   const [message, setMessage] = useState("");
@@ -17,7 +17,7 @@ function App() {
       [name]: value,
     }));
   };
-  const   handleUpload = (e) => {
+  const handleUpload = (e) => {
     setFormData({ ...formData, file: e.target.files[0] });
   };
   const handleSubmit = (e) => {
@@ -102,6 +102,7 @@ function App() {
 
       <Routes>
         <Route path="/all-users" element={<AllUsers />} />
+        <Route path={`/posts/:id`} element={<Post />} />
       </Routes>
       {console.log(formData)}
     </div>

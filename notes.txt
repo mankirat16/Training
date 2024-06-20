@@ -16,7 +16,6 @@ make a user profile
 -> section (A , B , C , D) -> {students:{} , name : ""}
 etc etc using sequelize (ORM)
 
-Implement CRUD FOR ALL ATTRUBUTES ;
-
+Implement CRUD FOR ALL ATTRUBUTES;
 
 1user table,1sectionn table,1address table,1profile
