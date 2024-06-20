@@ -17,11 +17,17 @@ function App() {
       [name]: value,
     }));
   };
-
+  const   handleUpload = (e) => {
+    setFormData({ ...formData, file: e.target.files[0] });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/addUser", formData)
+      .post("http://localhost:5000/addUser", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         setMessage(`User ${formData.name} added to the database.`);
         setTimeout(() => {
@@ -43,7 +49,11 @@ function App() {
   return (
     <div className="App container mt-5">
       <h1 className="mb-4">User Management</h1>
-      <form onSubmit={handleSubmit} className="mb-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mb-4"
+        encType="multipart/form-data"
+      >
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Username
@@ -69,8 +79,19 @@ function App() {
             value={formData.pwd}
             onChange={handleChange}
           />
+          <input
+            id="file"
+            name="file"
+            type="file"
+            className="form-control"
+            onChange={handleUpload}
+          />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          style={{ marginRight: "2pt" }}
+        >
           Add
         </button>
       </form>
@@ -78,9 +99,11 @@ function App() {
       <button className="btn btn-secondary" onClick={handleViewAll}>
         View All Users
       </button>
+
       <Routes>
         <Route path="/all-users" element={<AllUsers />} />
       </Routes>
+      {console.log(formData)}
     </div>
   );
 }

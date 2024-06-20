@@ -69,6 +69,15 @@ export default function AllUsers() {
               <button className="delete-btn" onClick={() => delUser(user)}>
                 Delete
               </button>
+              <div
+                style={{
+                  maxHeight: "40px",
+                  maxWidth: "40px",
+                  border: "2px solid black",
+                }}
+              >
+                
+              </div>
             </li>
           ))}
         </ol>
