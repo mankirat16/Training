@@ -1,0 +1,22 @@
+single responsibility principle 
+class based models 
+implement all associations (ALL)
+understand raw queries in sequelize 
+
+next task -> 
+implement assoiciations : oneToMany , manyToOne etc etc 
+
+make a user profile 
+-> name 
+-> email 
+-> addresses(many)
+-> payment methods(many)
+-> profile pic (one)(upload to cloud service)(s3)
+-> qualifications(many)
+-> section (A , B , C , D) -> {students:{} , name : ""}
+etc etc using sequelize (ORM)
+
+Implement CRUD FOR ALL ATTRUBUTES ;
+
+
+1user table,1sectionn table,1address table,1profile
