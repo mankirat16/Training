@@ -4,7 +4,7 @@ implement all associations (ALL)
 understand raw queries in sequelize 
 
 next task -> 
-implement assoiciations : oneToMany , manyToOne etc etc 
+implement assoiciations : oneToMany , manyToOne etc etc;
 
 make a user profile 
 -> name 
