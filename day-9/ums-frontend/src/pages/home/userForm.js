@@ -1,138 +1,4 @@
-// // src/UserForm.js
-// import React, { useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   TextField,
-//   MenuItem,
-//   Select,
-//   InputLabel,
-//   FormControl,
-//   Typography,
-// } from "@mui/material";
-// const root = {
-//   display: "flex",
-//   flexDirection: "column",
-//   alignItems: "center",
-//   justifyContent: "center",
-//   "& .MuiTextField-root": { m: 1, width: "50ch" },
-//   border: "1px solid grey",
-//   borderRadius:'5px',
-//   padding:'50px',
-//   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
-// };
-// const UserForm = () => {
-//   const [formData, setFormData] = useState({
-//     id: "",
-//     name: "",
-//     email: "",
-//     address: "",
-//     paymentMethod: "",
-//     section: "",
-//     profileImage: null,
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleImageChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       profileImage: e.target.files[0],
-//     });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log(formData);
-//     // Here you can handle the form submission, e.g., send the data to a server
-//   };
-
-//   return (
-//     <Box
-//       component="form"
-//       sx={root}
-//       noValidate
-//       autoComplete="off"
-//       onSubmit={handleSubmit}
-//     >
-//       <Typography variant="h4" gutterBottom>
-//         User Form
-//       </Typography>
-//       <TextField
-//         label="ID"
-//         variant="outlined"
-//         name="id"
-//         value={formData.id}
-//         onChange={handleChange}
-//       />
-//       <TextField
-//         label="Name"
-//         variant="outlined"
-//         name="name"
-//         value={formData.name}
-//         onChange={handleChange}
-//       />
-//       <TextField
-//         label="Email"
-//         variant="outlined"
-//         type="email"
-//         name="email"
-//         value={formData.email}
-//         onChange={handleChange}
-//       />
-//       <TextField
-//         label="Address"
-//         variant="outlined"
-//         name="address"
-//         value={formData.address}
-//         onChange={handleChange}
-//       />
-//       <FormControl sx={{ m: 1, minWidth: 120 }}>
-//         <InputLabel>Payment Method</InputLabel>
-//         <Select
-//           value={formData.paymentMethod}
-//           label="Payment Method"
-//           name="paymentMethod"
-//           onChange={handleChange}
-//         >
-//           <MenuItem value={"Credit Card"}>Credit Card</MenuItem>
-//           <MenuItem value={"Debit Card"}>Debit Card</MenuItem>
-//           <MenuItem value={"PayPal"}>PayPal</MenuItem>
-//         </Select>
-//       </FormControl>
-//       <TextField
-//         label="Section"
-//         variant="outlined"
-//         name="section"
-//         value={formData.section}
-//         onChange={handleChange}
-//       />
-//       <Button variant="contained" component="label" sx={{ m: 1 }}>
-//         Upload Profile Image
-//         <input
-//           type="file"
-//           hidden
-//           accept="image/*"
-//           onChange={handleImageChange}
-//         />
-//       </Button>
-//       <Button type="submit" variant="contained" sx={{ m: 1 }}>
-//         Submit
-//       </Button>
-//     </Box>
-//   );
-// };
-
-// export default UserForm;
-
-// src/UserForm.js
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -143,7 +9,8 @@ import {
   FormControl,
   Typography,
 } from "@mui/material";
-
+import axios from "axios";
+import { UpdateContext } from "../../updateContext";
 const root = {
   display: "flex",
   flexDirection: "column",
@@ -155,7 +22,28 @@ const root = {
   boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
 };
 
+const alertStyles = {
+  border: "2px solid #0096FF",
+  borderRadius: "5px",
+  backgroundColor: "lightBlue",
+  padding: "5px",
+};
+
+const qualificationsOptions = [
+  "Bachelor of Science in Computer Science",
+  "Master of Business Administration",
+  "Doctor of Philosophy in Physics",
+  "Bachelor of Arts in English Literature",
+  "Master of Science in Data Science",
+  "Doctor of Medicine",
+  "Bachelor of Engineering in Mechanical Engineering",
+  "Master of Fine Arts in Creative Writing",
+  "Doctor of Education",
+  "Bachelor of Laws",
+];
+
 const UserForm = () => {
+  const { update, id } = useContext(UpdateContext);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -166,6 +54,45 @@ const UserForm = () => {
     qualifications: [{ value: "" }],
     profileImage: null,
   });
+  const [alert, setAlert] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (update && id) {
+      axios
+        .post("http://localhost:5000/user/getProfile", { id })
+        .then((res) => {
+          const data = res.data.data;
+          console.log(data, "view");
+          var qualifications = data.qualification;
+          const section = data.section;
+          const addresses = data.result.addresses.map((item) => {
+            return { value: item };
+          });
+          qualifications = qualifications.map((item) => {
+            return { value: item };
+          });
+          setFormData({
+            ...data.result,
+            qualifications: qualifications,
+            section: section,
+            addresses: addresses,
+            paymentMethod: data.result.paymentMethods[0],
+          });
+          // Ensure addresses and qualifications have at least one entry
+          // if (data.addresses.length === 0) {
+          //   data.addresses = [{ value: "" }];
+          // }
+          // if (data.qualifications.length === 0) {
+          //   data.qualifications = [{ value: "" }];
+          // }
+          // setFormData(data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [update, id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -181,6 +108,7 @@ const UserForm = () => {
       profileImage: e.target.files[0],
     });
   };
+
   const isFormInvalid = () => {
     const basicFields = ["id", "name", "email", "paymentMethod", "section"];
     for (let field of basicFields) {
@@ -261,9 +189,45 @@ const UserForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isFormInvalid()) return;
-    console.log("Form submitted");
-    e.preventDefault();
-    console.log(formData);
+    if (update && id) {
+      const newData = {
+        id: formData.id,
+        name: formData.name,
+        email: formData.email,
+        address: formData.addresses.map((item) => {
+          return item.value;
+        }),
+        paymentMethod: [formData.paymentMethod],
+        section: formData.section,
+        qualifications: formData.qualifications.map((item) => {
+          return item.value;
+        }),
+      };
+      // setFormData(newData);
+      axios
+        .put("http://localhost:5000/user/updateProfile", newData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      axios
+        .post("http://localhost:5000/user/addUser", formData)
+        .then((res) => {
+          setAlert(true);
+          setTimeout(() => {
+            setAlert(false);
+          }, 3000);
+        })
+        .catch((e) => {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+          }, 3000);
+        });
+    }
   };
 
   return (
@@ -274,6 +238,18 @@ const UserForm = () => {
       autoComplete="off"
       onSubmit={handleSubmit}
     >
+      {alert && <p style={alertStyles}>User added successfully!</p>}
+      {error && (
+        <p
+          style={{
+            ...alertStyles,
+            backgroundColor: "#FF8488",
+            border: "1px solid #FF474D",
+          }}
+        >
+          An error occurred while adding user!
+        </p>
+      )}
       <Typography variant="h4" gutterBottom>
         User Form
       </Typography>
@@ -346,13 +322,21 @@ const UserForm = () => {
         onChange={handleChange}
       />
       {formData.qualifications.map((qualification, index) => (
-        <div key={`qualification-${index}`}>
-          <TextField
-            label={`Qualification ${index + 1}`}
-            variant="outlined"
-            value={qualification.value}
-            onChange={(e) => handleQualificationChange(e, index)}
-          />
+        <div key={`qualification-${index}`} style={{ maxWidth: "90%" }}>
+          <FormControl sx={{ m: 1, minWidth: 430 }}>
+            <InputLabel>Qualification {index + 1}</InputLabel>
+            <Select
+              value={qualification.value}
+              label={`Qualification ${index + 1}`}
+              onChange={(e) => handleQualificationChange(e, index)}
+            >
+              {qualificationsOptions.map((option, idx) => (
+                <MenuItem key={`option-${idx}`} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           {index > 0 && (
             <Button
               variant="outlined"
@@ -365,6 +349,7 @@ const UserForm = () => {
           )}
         </div>
       ))}
+
       {formData.qualifications.length < 3 && (
         <Button
           variant="contained"
@@ -374,20 +359,16 @@ const UserForm = () => {
           Add Qualification
         </Button>
       )}
-      <Box display={"flex"} marginTop={5}>
-        <Button variant="outlined" component="label" sx={{ m: 1 }}>
-          Upload Profile Image
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </Button>
-        <Button type="submit" variant="contained" sx={{ m: 1 }}>
-          Submit
-        </Button>
-      </Box>
+      <TextField
+        variant="outlined"
+        type="file"
+        name="profileImage"
+        onChange={handleImageChange}
+        sx={{ mt: 2 }}
+      />
+      <Button variant="contained" type="submit" sx={{ mt: 3 }}>
+        Submit
+      </Button>
     </Box>
   );
 };
