@@ -12,7 +12,11 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Edit, Delete } from "@mui/icons-material";
-const currentUser = JSON.parse(localStorage.getItem("user")) || { id: 1 };
+const profilePic = {
+  height: "35%",
+  maxWidth: "30%",
+  borderRadius: "70%",
+};
 const UserInfo = () => {
   const [user, setUser] = useState({
     addresses: [],
@@ -28,6 +32,7 @@ const UserInfo = () => {
           const data = res.data.data;
           const qualifications = data.qualification;
           const section = data.section;
+          console.log(res.data, "data from profile");
           setUser({
             ...data.result,
             qualifications: qualifications,
@@ -45,12 +50,15 @@ const UserInfo = () => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        marginTop: 3,
-        minWidth: "10000px",
+        marginTop: 10,
+        minWidth: "100px",
+        maxWidth: "800px",
       }}
     >
       {console.log(user)}
       <Card sx={{ minWidth: 600, boxShadow: 4, borderRadius: 2, padding: 2 }}>
+        <img src={user.profilePic} style={profilePic} />
+
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
             {user.name}
@@ -117,17 +125,6 @@ const UserInfo = () => {
             />
           )}
         </CardContent>
-        <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button
-            startIcon={<Edit />}
-            variant="outlined"
-            color="primary"
-            sx={{ minWidth: "100%" }}
-            onClick={() => navigate("/updateProfile")}
-          >
-            Edit Profile
-          </Button>
-        </CardActions>
       </Card>
     </Box>
   );

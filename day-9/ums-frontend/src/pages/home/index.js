@@ -4,7 +4,7 @@ import Header from "./header";
 import UserForm from "./userForm";
 export default function Home() {
   return (
-    <Box >
+    <Box marginTop={8}>
       <Header />
       <UserForm/>
     </Box>

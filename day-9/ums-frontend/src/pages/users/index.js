@@ -50,7 +50,7 @@ export default function Users() {
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-      marginTop={3}
+      marginTop={8}
     >
       {users.map((user) => (
         <Card

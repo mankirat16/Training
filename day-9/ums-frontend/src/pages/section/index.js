@@ -12,11 +12,14 @@ import {
 import { Edit, Delete, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { UpdateContext } from "../../updateContext";
-
+import SectionUpdateFormDialog from "./sectionUpdateForm";
 export default function Sections() {
   const navigate = useNavigate();
   const [sections, setSections] = useState([]);
   const { sectionId, setSectionId } = useContext(UpdateContext);
+  const [update, setUpdate] = useState(false);
+  const [sectionName, setSectionName] = useState("");
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/section/getSections")
@@ -31,6 +34,9 @@ export default function Sections() {
     setSectionId(section.id);
     navigate("/view-section");
   };
+  const handleDialogClose = () => {
+    setUpdate(false);
+  };
   return (
     <Box
       sx={{
@@ -39,9 +45,16 @@ export default function Sections() {
         gap: 3,
         flexWrap: "flex-wrap",
       }}
-      marginTop={3}
+      marginTop={10}
       maxWidth={900}
     >
+      <SectionUpdateFormDialog
+        openDialog={update}
+        sectionId={sectionId}
+        handleClose={handleDialogClose}
+        sectionName={sectionName}
+        setOpenDialog={setUpdate}
+      />
       {sections.map((section) => (
         <Card
           key={section.id}
@@ -66,13 +79,17 @@ export default function Sections() {
                 handleViewSection(section);
               }}
             >
-              VIEW SECTION
+              VIEW STUDENTS
             </Button>
             <Button
               startIcon={<Edit />}
               variant="outlined"
               color="primary"
-              onClick={() => {}}
+              onClick={() => {
+                setSectionId(section.id);
+                setSectionName(section.name);
+                setUpdate(true);
+              }}
             >
               EDIT
             </Button>

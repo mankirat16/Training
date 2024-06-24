@@ -13,24 +13,38 @@ const addSection = async (req, res, next) => {
 };
 
 const deleteSection = async (req, res, next) => {
-  const result = await Section.destroy({ where: { id: req.body.id } });
-  res.json({ data: result });
+  try {
+    const result = await Section.destroy({ where: { id: req.body.id } });
+    res.json({ data: result });
+  } catch (e) {
+    console.log("error " + e);
+    res.sendStatus(500);
+  }
 };
 
 const viewSectionUsers = async (req, res, next) => {
-  console.log(req.body.id)
-  const result = await Section.findOne({ where: { id: req.body.id } });
-  const users = await result.getUsers();
-  res.json({ data: users });
+  console.log(req.body.id);
+  try {
+    const result = await Section.findOne({ where: { id: req.body.id } });
+    const users = await result.getUsers();
+    res.json({ data: users });
+  } catch (e) {
+    console.log("eror " + e);
+    res.sendStatus(500);
+  }
 };
 
-
 const updateSection = async (req, res, next) => {
-  const result = await Section.update(
-    { name: req.body.name },
-    { where: { id: req.body.id } }
-  );
-  res.json({ data: result });
+  try {
+    const result = await Section.update(
+      { name: req.body.name },
+      { where: { id: req.body.id } }
+    );
+    res.json({ data: result });
+  } catch (e) {
+    console.log("Error while updating section");
+    res.sendStatus(500);
+  }
 };
 
 module.exports = {

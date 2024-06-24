@@ -1,17 +1,20 @@
-const {DataTypes,Sequelize} = require('sequelize')
-const sequelize=require('../connection/db')
+const { DataTypes, Sequelize } = require("sequelize");
+const sequelize = require("../connection/db");
 
 class UserQualification extends Sequelize.Model {}
-UserQualification.init({
-  userQualificationId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+UserQualification.init(
+  {
+    userQualificationId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
   },
-}, {
-  sequelize,
-  modelName: 'UserQualification',
-  timestamps: false, // Disable timestamps
-});
+  {
+    sequelize,
+    modelName: "UserQualification",
+    timestamps: false,
+  }
+);
 
 module.exports = UserQualification;
