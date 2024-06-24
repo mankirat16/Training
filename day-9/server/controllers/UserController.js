@@ -59,7 +59,6 @@ const addUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-  console.log(req.body, "BODY");
   const result = await User.destroy({ where: { id: req.body.id } });
   res.json({ data: result });
 };
@@ -87,7 +86,6 @@ const updateProfile = async (req, res, next) => {
     section: req.body.section,
     profileImage: req.body.profileImage,
   };
-  console.log(req.body, "METHOD");
   let imageUrl;
   try {
     const find = await User.findOne({ id: user.id });

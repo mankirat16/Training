@@ -8,8 +8,13 @@ const getSections = async (req, res, next) => {
 };
 
 const addSection = async (req, res, next) => {
-  const result = await Section.create({ name: req.body.name });
-  res.json({ data: "test" });
+  try {
+    const result = await Section.create({ name: req.body.name });
+    res.json({ data: "test" });
+  } catch (e) {
+    console.log("error " + e);
+    res.sendStatus(500);
+  }
 };
 
 const deleteSection = async (req, res, next) => {
