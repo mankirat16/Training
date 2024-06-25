@@ -19,3 +19,8 @@ etc etc using sequelize (ORM)
 Implement CRUD FOR ALL ATTRUBUTES;
 
 1user table,1sectionn table,1address table,1profile
+
+
+-> next task 
+pagination (why pagination);(pagination on backend);
+sending file directly to cloud 
