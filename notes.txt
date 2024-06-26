@@ -2,7 +2,7 @@ single responsibility principle
 class based models 
 implement all associations (ALL)
 understand raw queries in sequelize 
-
+-------------------------------------------------------------------------------------
 next task -> 
 implement assoiciations : oneToMany , manyToOne etc etc;
 
@@ -19,8 +19,16 @@ etc etc using sequelize (ORM)
 Implement CRUD FOR ALL ATTRUBUTES;
 
 1user table,1sectionn table,1address table,1profile
-
+-------------------------------------------------------------------------------------
 
 -> next task 
 pagination (why pagination);(pagination on backend);
 sending file directly to cloud 
+-------------------------------------------------------------------------------------
+
+next task -> 26/06/2003 , Thursday : submission Friday
+ACID properties , why  do we need this 
+Real time examples of every property, both cases , failiure and solution
+Normalization 
+indexing 
+examples of every property indexing and Normalizatio;
