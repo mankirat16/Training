@@ -11,11 +11,15 @@ Task.init(
     },
     completed: {
       type: DataTypes.BOOLEAN,
-      allowNull:true,
+      allowNull: true,
       defaultValue: false,
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    priority: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

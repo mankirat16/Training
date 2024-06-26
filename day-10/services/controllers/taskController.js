@@ -1,21 +1,31 @@
 const task = require("../models/TaskModel");
 const getAllTasks = async (req, res, next) => {
+  const limit = parseInt(req.query.limit) || 5;
+  const offset = parseInt(req.query.offset) || 0;
+  const sorting = req.query.sort || "ASC";
+
   try {
-    const data = await task.findAll();
-    res.json({ ...data });
+    const data = await task.findAll({
+      limit: limit,
+      offset: offset,
+      order: [["priority", sorting]],
+    });
+    const totalTasks = await task.count();
+    res.json({ tasks: data, totalTasks: totalTasks });
   } catch (e) {
     console.log(e);
-    res.status(404);
+    res.status(404).json({ error: "Error fetching tasks" });
   }
 };
+
 const addTask = async (req, res, next) => {
-  console.log("add");
   if (req.body.name) {
     const newTask = {
       name: req.body.name,
+      priority: req.body.priority,
     };
     try {
-      const res = await task.create(newTask);
+      const result = await task.create(newTask);
       res.sendStatus(200);
     } catch (e) {
       res.status(404).json({ data: e });
@@ -24,21 +34,20 @@ const addTask = async (req, res, next) => {
     res.status(404).json({ message: "Empty task name" });
   }
 };
+
 const updateTask = async (req, res, next) => {
-  if (req.body.id) {
-    if (req.body.name) {
-      try {
-        const result = await task.update(
-          {
-            name: req.body.name,
-          },
-          { where: { id: req.body.id } }
-        );
-        res.sendStatus(200);
-      } catch (e) {
-        console.log(e);
-        res.sendStatus(404);
-      }
+  if (req.body.name) {
+    try {
+      const result = await task.update(
+        {
+          name: req.body.name,
+        },
+        { where: { id: req.body.id } }
+      );
+      res.sendStatus(200);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(404);
     }
   } else {
     res.sendStatus(404);
