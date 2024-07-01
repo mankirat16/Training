@@ -3,6 +3,8 @@ product{
     name 
     seller
     buyer
+    image 
+    qty (in cart)
 }
 admin{
     email 
@@ -19,3 +21,4 @@ cart{
     products
     amount
 }
+admin can add products into the database 
