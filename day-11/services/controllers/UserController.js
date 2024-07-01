@@ -16,7 +16,6 @@ const addBook = async (req, res, next) => {
     const newBook = { name: req.body.name };
     const result = await Book.create(newBook, { transaction: t });
     const author = await Author.findOne({ where: { name: req.body.author } });
-    console.log(author, "author");
     await author.addBooks(result, { transaction: t });
     await t.commit();
     res.send("user added");
