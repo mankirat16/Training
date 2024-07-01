@@ -1,0 +1,21 @@
+product{
+    id 
+    name 
+    seller
+    buyer
+}
+admin{
+    email 
+    pwd
+}
+user{
+    id
+    email 
+    pwd
+    cart:[]
+}
+cart{
+    id
+    products
+    amount
+}

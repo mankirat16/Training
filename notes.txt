@@ -32,3 +32,11 @@ Real time examples of every property, both cases , failiure and solution
 Normalization 
 indexing 
 examples of every property indexing and Normalizatio;
+
+
+ecommerce website ; backend focussed -> admin mode and user mode 
+make a layout-> then database 
+products 
+admin 
+user 
+cart 
