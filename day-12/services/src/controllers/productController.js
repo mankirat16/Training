@@ -48,4 +48,15 @@ const delproduct = async (req, res, next) => {
     res.status(404).json({ message: "Internal server error" });
   }
 };
-module.exports = { addProduct, delproduct, getAllProducts };
+const sortByPrice = async (req, res, next) => {
+  try {
+    const users = await Product.findAll({
+      order: [["price", "ASC"]],
+    });
+    res.status(200).json([...users]);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ message: "Error while fetching users" });
+  }
+};
+module.exports = { addProduct, delproduct, getAllProducts, sortByPrice };

@@ -13,10 +13,15 @@ import {
 import { useContext } from "react";
 import { UpdateContext } from "../../adminContext";
 import { useNavigate } from "react-router-dom";
+import Switch from "@mui/material/Switch";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 export default function Body() {
   const [products, setProducts] = useState([]);
   const { cartId } = useContext(UpdateContext);
   const navigate = useNavigate();
+  const [sorted, setSorted] = useState(false);
+
   useEffect(() => {
     console.log(cartId);
     axios
@@ -28,6 +33,31 @@ export default function Body() {
         console.log(e);
       });
   }, []);
+  const handleSort = (e) => {
+    if (sorted) {
+      axios
+        .get("http://localhost:5000/product/all-products")
+        .then((res) => {
+          console.log(res);
+          setProducts(res.data);
+          setSorted(false);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      axios
+        .get("http://localhost:5000/product/sort-products")
+        .then((res) => {
+          console.log(res);
+          setProducts(res.data);
+          setSorted(true);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
 
   const handleAddToCart = (productId) => {
     if (!cartId) return;
@@ -49,6 +79,12 @@ export default function Body() {
       <Typography variant="h4" component="h1" gutterBottom>
         All Products
       </Typography>
+      <FormControlLabel
+        control={<Switch />}
+        label="Sort By Price"
+        onClick={handleSort}
+      />
+      {console.log(sorted, "sort")}
       <Button
         variant="outlined"
         onClick={() => {
