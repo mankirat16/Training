@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function AdminForm() {
   const [form, setForm] = useState({
     name: "",
@@ -24,6 +26,7 @@ export default function AdminForm() {
       .post("http://localhost:5000/product/add-product", form)
       .then((res) => {
         console.log(res);
+        toast("Product added");
       })
       .catch((e) => {
         console.log(e);
@@ -32,6 +35,7 @@ export default function AdminForm() {
 
   return (
     <Container maxWidth="sm">
+      <ToastContainer />
       <Typography variant="h4" component="h1" gutterBottom>
         Add New Product
       </Typography>

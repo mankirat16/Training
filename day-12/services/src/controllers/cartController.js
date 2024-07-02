@@ -63,4 +63,26 @@ const getAmount = async (req, res, next) => {
     res.status(404).json("Internal server error");
   }
 };
-module.exports = { addToCart, removeFromCart, getAmount };
+const getProducts = async (req, res, next) => {
+  let products = [];
+  try {
+    const cart = await Cart.findOne({
+      where: { id: req.body.id },
+    });
+    cart.productIds.forEach(async (id, index) => {
+      const product = await Product.findOne({
+        where: { id: id },
+      });
+      products.push(product);
+      if (index === cart.productIds.length - 1) {
+        res.status(200).json([...products]);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({
+      message: "Internal server error",
+    });
+  }
+};
+module.exports = { addToCart, removeFromCart, getAmount, getProducts };

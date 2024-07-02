@@ -22,6 +22,7 @@ const addUser = async (req, res, next) => {
     await t.commit();
     res.status(200).json({
       message: "User added successfully",
+      cartId: result.dataValues.id,
     });
   } catch (e) {
     await t.rollback();
@@ -38,12 +39,13 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: {
-        name: name,          
+        name: name,
       },
     });
     if (user && bcrypt.compareSync(pwd, user.pwd) && user.role === role) {
       res.status(200).json({
         message: "logged in successfully",
+        cartId: user.id,
       });
     } else {
       res.status(401).json({
@@ -57,4 +59,13 @@ const login = async (req, res, next) => {
     });
   }
 };
-module.exports = { addUser, login };
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json([...users]);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ message: "Internal server error" });
+  }
+};
+module.exports = { addUser, login  , getUsers};
