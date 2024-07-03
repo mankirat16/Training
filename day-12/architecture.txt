@@ -12,7 +12,7 @@ admin{
 }
 user{
     id
-    email 
+    email  
     pwd
     cart:[]
 }
@@ -22,3 +22,9 @@ cart{
     amount
 }
 admin can add products into the database 
+user profile 
+user can have multiple paymenbt methods 
+user can have multiple addresses 
+user shud be able to reset password 
+email on order confirm 
+notification on add to cart
