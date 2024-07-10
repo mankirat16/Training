@@ -14,7 +14,7 @@ function App() {
           {routes.map((route, index) => {
             const isPublicRoute =
               route.path === "/signup" ||
-              route.path === "/login"
+              route.path === "/login" || route.path==='/reset-password'
             return (
               <Route
                 key={index}

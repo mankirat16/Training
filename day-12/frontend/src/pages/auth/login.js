@@ -12,43 +12,51 @@
 //   CssBaseline,
 //   IconButton,
 //   InputAdornment,
+//   Radio,
+//   RadioGroup,
+//   FormControlLabel,
+//   FormControl,
+//   FormLabel,
 // } from "@mui/material";
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 // import Visibility from "@mui/icons-material/Visibility";
 // import VisibilityOff from "@mui/icons-material/VisibilityOff";
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
+
 // export default function Login() {
 //   const { setIsLoggedIn, setCartId, isLoggedIn } = useContext(UpdateContext);
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 //   const [showPassword, setShowPassword] = useState(false);
-//   const [invalid, setInvalid] = useState(false);
+//   const [role, setRole] = useState("buyer");
+//   const navigate = useNavigate();
+
 //   useEffect(() => {
 //     if (isLoggedIn) navigate("/");
-//   }, [isLoggedIn]);
+//   }, [isLoggedIn, navigate]);
+
 //   const handleClickShowPassword = () => setShowPassword((show) => !show);
-//   const navigate = useNavigate();
+
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
 //     axios
 //       .post("http://localhost:5000/user/login", {
 //         name: email,
 //         pwd: password,
-//         role: "user",
+//         role: role,
 //       })
 //       .then((res) => {
 //         console.log(res);
 //         setIsLoggedIn(true);
 //         setCartId(res.data.cartId);
-//         navigate("/");
+//         role === "admin" ? navigate("/admin-panel") : navigate("/");
 //       })
 //       .catch((e) => {
 //         console.log(e);
-//         toast("Invalid username or password");
-//         setTimeout(() => {
-//           setInvalid(false);
-//         }, 2000);
+//         toast.error("Invalid username or password", {
+//           progressStyle: { backgroundColor: "red" },
+//         });
 //       });
 //   };
 
@@ -112,6 +120,37 @@
 //               ),
 //             }}
 //           />
+//           <FormControl component="fieldset" sx={{ mt: 2 }}>
+//             <FormLabel component="legend">Role</FormLabel>
+//             <RadioGroup
+//               row
+//               aria-label="role"
+//               name="role"
+//               value={role}
+//               onChange={(e) => setRole(e.target.value)}
+//             >
+//               <FormControlLabel
+//                 value="seller"
+//                 control={<Radio />}
+//                 label="Seller"
+//               />
+//               <FormControlLabel
+//                 value="buyer"
+//                 control={<Radio />}
+//                 label="Buyer"
+//               />
+//               <FormControlLabel
+//                 value="support"
+//                 control={<Radio />}
+//                 label="Support"
+//               />
+//               <FormControlLabel
+//                 value="admin"
+//                 control={<Radio />}
+//                 label="Admin"
+//               />
+//             </RadioGroup>
+//           </FormControl>
 //           <Button
 //             type="submit"
 //             fullWidth
@@ -128,6 +167,7 @@
 //     </Container>
 //   );
 // }
+
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UpdateContext } from "../../adminContext";
@@ -142,8 +182,11 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
-  Checkbox,
+  Radio,
+  RadioGroup,
   FormControlLabel,
+  FormControl,
+  FormLabel,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
@@ -156,7 +199,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState("buyer");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -171,13 +214,13 @@ export default function Login() {
       .post("http://localhost:5000/user/login", {
         name: email,
         pwd: password,
-        role: isAdmin ? "admin" : "user",
+        role: role,
       })
       .then((res) => {
         console.log(res);
         setIsLoggedIn(true);
         setCartId(res.data.cartId);
-        isAdmin ? navigate("/admin-panel") : navigate("/");
+        role === "admin" ? navigate("/admin-panel") : navigate("/");
       })
       .catch((e) => {
         console.log(e);
@@ -247,17 +290,37 @@ export default function Login() {
               ),
             }}
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}
-                name="isAdmin"
-                color="primary"
+          <FormControl component="fieldset" sx={{ mt: 2 }}>
+            <FormLabel component="legend">Role</FormLabel>
+            <RadioGroup
+              row
+              aria-label="role"
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <FormControlLabel
+                value="seller"
+                control={<Radio />}
+                label="Seller"
               />
-            }
-            label="Log in as Admin"
-          />
+              <FormControlLabel
+                value="buyer"
+                control={<Radio />}
+                label="Buyer"
+              />
+              <FormControlLabel
+                value="support"
+                control={<Radio />}
+                label="Support"
+              />
+              <FormControlLabel
+                value="admin"
+                control={<Radio />}
+                label="Admin"
+              />
+            </RadioGroup>
+          </FormControl>
           <Button
             type="submit"
             fullWidth
@@ -268,6 +331,9 @@ export default function Login() {
           </Button>
           <Typography variant="body2">
             New user? <Link to="/signup">Sign up here</Link>
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            <Link to="/reset-password">Forgot Password?</Link>
           </Typography>
         </Box>
       </Box>

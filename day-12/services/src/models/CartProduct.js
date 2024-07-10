@@ -14,12 +14,35 @@ CartItem.init(
     cartId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      reference,
+      references: {
+        model: Cart,
+        key: "id",
+      },
+    },
+    productId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Product,
+        key: "id",
+      },
+    },
+    qty: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+      allowNull: false,
     },
   },
   {
     sequelize,
-    modelname: "CartItem",
+    modelName: "CartItem",
     timestamps: false,
+    indexes: [
+      {
+        unique: false,
+        fields: ["cartId", "productId"],
+      },
+    ],
   }
 );
+module.exports = CartItem;

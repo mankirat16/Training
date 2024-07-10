@@ -8,9 +8,10 @@ Cart.init(
       allowNull: false,
       primaryKey: true,
     },
-    productIds: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: true,
+    amount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+      allowNull: false,
     },
   },
   {

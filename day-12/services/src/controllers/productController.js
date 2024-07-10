@@ -16,7 +16,7 @@ const addProduct = async (req, res, next) => {
     name: req.body.name || "",
     img: req.body.img || "",
     seller: req.body.seller || "",
-    price: req.body.price || 0,
+    price: req.body.price || null,
   };
   const t = await sequelize.transaction();
   try {
@@ -59,4 +59,25 @@ const sortByPrice = async (req, res, next) => {
     res.status(404).json({ message: "Error while fetching users" });
   }
 };
-module.exports = { addProduct, delproduct, getAllProducts, sortByPrice };
+const getCartProducts = async (req, res, next) => {
+  try {
+    const result = await Product.findAll({
+      where: {
+        id: req.body.ids,
+      },
+    });
+    res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({
+      message: "Error while fetching users",
+    });
+  }
+};
+module.exports = {
+  addProduct,
+  delproduct,
+  getAllProducts,
+  sortByPrice,
+  getCartProducts,
+};

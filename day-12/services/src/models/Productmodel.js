@@ -14,9 +14,11 @@ Product.init(
     },
     seller: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     img: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
     price: {
       type: DataTypes.INTEGER,
@@ -27,6 +29,12 @@ Product.init(
     sequelize,
     modelName: "Product",
     timestamps: false,
+    indexes: [
+      {
+        unique: false,
+        fields: ["id"],
+      },
+    ],
   }
 );
 module.exports = Product;

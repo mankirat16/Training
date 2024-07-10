@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import {
   Container,
@@ -10,37 +10,46 @@ import {
   CssBaseline,
   IconButton,
   InputAdornment,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { UpdateContext } from "../../adminContext";
-import { useContext } from "react";
+
 export default function Signup() {
   const { setCartId, setIsLoggedIn } = useContext(UpdateContext);
+  const [name, setName] = useState(""); // Added name state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [role, setRole] = useState("buyer");
+  const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:5000/user/add-user", {
-        name: email,
+        name: name,
+        email: email,
         pwd: password,
-        role: "user",
+        role: role,
       })
       .then((res) => {
         console.log(res);
         setCartId(res.data.cartId);
         setIsLoggedIn(true);
+        navigate("/");
       })
       .catch((e) => {
         console.log(e);
+        navigate("/login");
       });
   };
 
@@ -70,11 +79,22 @@ export default function Signup() {
             margin="normal"
             required
             fullWidth
+            id="name"
+            label="Name"
+            name="name"
+            autoComplete="name"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -103,6 +123,27 @@ export default function Signup() {
               ),
             }}
           />
+          <FormControl component="fieldset" sx={{ mt: 2 }}>
+            <FormLabel component="legend">Role</FormLabel>
+            <RadioGroup
+              row
+              aria-label="role"
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <FormControlLabel
+                value="buyer"
+                control={<Radio />}
+                label="Buyer"
+              />
+              <FormControlLabel
+                value="seller"
+                control={<Radio />}
+                label="Seller"
+              />
+            </RadioGroup>
+          </FormControl>
           <Button
             type="submit"
             fullWidth
@@ -112,7 +153,7 @@ export default function Signup() {
             Sign Up
           </Button>
           <Typography variant="body2">
-            Already registered <Link to="/login">Log In Here</Link>
+            Already registered? <Link to="/login">Log In Here</Link>
           </Typography>
         </Box>
       </Box>
