@@ -284,7 +284,7 @@ import "react-toastify/dist/ReactToastify.css";
 import FormDialog from "./orderDialog";
 
 export default function Cart() {
-  const { cartId } = useContext(UpdateContext);
+  const { cartId, setCartNumber } = useContext(UpdateContext);
   const [cartItems, setCartItems] = useState([]);
   const [amt, setAmt] = useState(0);
   const [cartEmpty, setCartEmpty] = useState(false);
@@ -306,6 +306,7 @@ export default function Cart() {
           .then((res) => {
             setCartItems(res.data);
             setCartEmpty(res.data.length === 0);
+            setCartNumber(res.data.length);
           })
           .catch((e) => {
             console.log(e);

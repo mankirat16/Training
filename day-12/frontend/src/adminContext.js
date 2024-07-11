@@ -6,6 +6,7 @@ export const UpdateProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartId, setCartId] = useState(null);
+  const [cartNumber, setCartNumber] = useState(0);
   return (
     <UpdateContext.Provider
       value={{
@@ -15,6 +16,8 @@ export const UpdateProvider = ({ children }) => {
         setIsLoggedIn,
         cartId,
         setCartId,
+        cartNumber,
+        setCartNumber,
       }}
     >
       {children}

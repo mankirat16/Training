@@ -40,3 +40,14 @@ products
 admin 
 user 
 cart 
+
+query profling 
+checking performance of query 
+
+
+version control help -> git 
+helps in collaboration 
+any change in the codebase is called version / new version
+
+presentation -> choosing column for index 
+when NOT to use index 

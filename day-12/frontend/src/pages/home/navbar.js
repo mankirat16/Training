@@ -58,11 +58,25 @@ import axios from "axios";
 import { UpdateContext } from "../../adminContext";
 import { useContext } from "react";
 const Navbar = () => {
-  const {setIsLoggedIn } = useContext(UpdateContext);
-  const [itemCount, setItemCount] = useState(1);
-  // useEffect(()=>{
-  //   axios.
-  // })
+  const { setIsLoggedIn, cartId, setCartNumber, cartNumber } =
+    useContext(UpdateContext);
+  axios
+    .post("http://localhost:5000/user/view-cart", { cartId: cartId })
+    .then((res) => {
+      const temp = res.data.map((item) => item.productId);
+      axios
+        .post("http://localhost:5000/user/get-cart", { ids: temp })
+        .then((res) => {
+          setCartNumber(res.data.length);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
   return (
     <AppBar position="fixed">
       <Container>
@@ -70,7 +84,7 @@ const Navbar = () => {
           <Typography variant="h6" sx={{ flexGrow: 0 }}>
             E-Commerce
           </Typography>
-          <Badge badgeContent={itemCount} color="secondary" sx={{ ml: 2 }}>
+          <Badge badgeContent={cartNumber} color="secondary" sx={{ ml: 2 }}>
             <ShoppingCart />
           </Badge>
           <Box sx={{ flexGrow: 2 }} />
