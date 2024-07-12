@@ -50,4 +50,4 @@ helps in collaboration
 any change in the codebase is called version / new version
 
 presentation -> choosing column for index 
-when NOT to use index 
+when NOT to use index 0

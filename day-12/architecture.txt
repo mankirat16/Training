@@ -28,3 +28,26 @@ user can have multiple addresses
 user shud be able to reset password 
 email on order confirm 
 notification on add to cart
+
+
+-------------------
+when NOT to use indexes
+
+1. Small Tables
+    When a table is small, the overhead of maintaining an index might not be justified. A sequential scan (full table scan) can be faster than using an index because the entire table might fit into memory, making the access time negligible.
+
+
+2. High Volume of INSERT, UPDATE, and DELETE Operations
+    Indexes need to be updated whenever a row is inserted, updated, or deleted. This maintenance can introduce significant overhead, slowing down write operations.
+    Example:
+    A table used for logging or real-time data ingestion where new rows are continuously inserted.
+    An index on a column that frequently changes, such as a status field in an order tracking system.
+
+
+3. Columns with Low Cardinality
+    Columns with low cardinality have a limited number of distinct values. Indexes on such columns are less effective because many rows will have the same indexed value, reducing the selectivity of the index.
+
+
+
+4. Composite Indexes with Infrequently Used Columns
+    Composite indexes (indexes on multiple columns) are only beneficial when queries use the left-most columns in the index. If the additional columns are rarely used in queries, the composite index may not provide significant benefits.
