@@ -319,7 +319,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Body() {
   const [products, setProducts] = useState([]);
-  const { cartId } = useContext(UpdateContext);
+  const { cartId, setCartNumber, cartNumber } = useContext(UpdateContext);
   const navigate = useNavigate();
   const [sorted, setSorted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -373,6 +373,22 @@ export default function Body() {
       .then((res) => {
         console.log(res);
         toast.success(`${productName} added to cart!`);
+        axios
+          .post("http://localhost:5000/user/view-cart", { cartId: cartId })
+          .then((res) => {
+            const temp = res.data.map((item) => item.productId);
+            axios
+              .post("http://localhost:5000/user/get-cart", { ids: temp })
+              .then((res) => {
+                setCartNumber(res.data.length);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       })
       .catch((e) => {
         console.log(e);
