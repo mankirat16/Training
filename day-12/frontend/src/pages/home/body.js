@@ -383,7 +383,7 @@ export default function Body() {
                 setCartNumber(res.data.length);
               })
               .catch((e) => {
-                // console.log(e);
+                console.log(e);
               });
           })
           .catch((e) => {
