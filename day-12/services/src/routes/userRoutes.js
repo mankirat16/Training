@@ -17,6 +17,7 @@ const {
   makeOrder,
   cancelOrder,
   getOrders,
+  updateStatus,
 } = require("../controllers/orderController");
 const { getCartProducts } = require("../controllers/productController");
 const router = Router();
@@ -34,4 +35,5 @@ router.post("/get-cart", getCartProducts);
 router.post("/send-otp", sendOtp);
 router.post("/verify-otp", verifyOtp);
 router.get("/all-orders", getOrders);
+router.post("/update-order-status", updateStatus);
 module.exports = router;

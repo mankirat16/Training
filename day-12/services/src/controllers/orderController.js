@@ -78,8 +78,31 @@ const getOrders = async (req, res, next) => {
     });
   }
 };
+const updateStatus = async (req, res, next) => {
+  try {
+    await Order.update(
+      {
+        status: req.body.status,
+      },
+      {
+        where: {
+          id: req.body.id,
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Order status updated successfully",
+    });
+  } catch (e) {
+    res.status(404).json({
+      message: "Internal server error",
+    });
+    console.log(e);
+  }
+};
 module.exports = {
   makeOrder,
   cancelOrder,
   getOrders,
+  updateStatus,
 };
