@@ -51,3 +51,9 @@ any change in the codebase is called version / new version
 
 presentation -> choosing column for index 
 when NOT to use index 0
+
+
+containerization of apps 
+why do we need docker ?
+what is containerization?
+advantages and disadvantages?
