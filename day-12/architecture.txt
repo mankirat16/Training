@@ -31,6 +31,8 @@ notification on add to cart
 
 
 -------------------
+
+
 when NOT to use indexes
 
 1. Small Tables
