@@ -20,9 +20,14 @@ Cart.belongsTo(User);
 User.hasMany(Order, { foreignKey: "userId" });
 Order.belongsTo(User, { foreignKey: "userId" });
 
-sequelize.sync().then(() => {
-  console.log("Database Connected");
-});
+(async () => {
+  await sequelize.authenticate();
+  await sequelize.sync();
+  console.log("connected");
+})();
+// sequelize.sync().then(() => {
+//   console.log("Database Connected");
+// });
 // const sender = {
 //   email: "mailtrap@demomailtrap.com",
 //   name: "Mailtrap Test",

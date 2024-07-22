@@ -45,12 +45,6 @@ Order.init(
     sequelize,
     modelName: "Order",
     timestamps: false,
-    indexes: [
-      {
-        unique: true,
-        fields: ["id"],
-      },
-    ],
   }
 );
 module.exports = Order;

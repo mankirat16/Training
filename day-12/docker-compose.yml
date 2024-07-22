@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    container_name: my-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2916
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - shared-network
+
+  app:
+    build:
+      context: ./services
+    container_name: my-node
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: 2916
+      DB_NAME: postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./services:/app
+    networks:
+      - shared-network
+
+  client:
+    build:
+      context: ./frontend
+    container_name: ecomm-client
+    ports:
+      - "3000:3000"
+    depends_on: 
+      - app
+    networks:
+      - shared-network
+
+volumes:
+  pgdata:
+
+networks:
+  shared-network:

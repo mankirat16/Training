@@ -31,7 +31,7 @@ Product.init(
     timestamps: false,
     indexes: [
       {
-        unique: false,
+        unique: true,
         fields: ["id"],
       },
     ],
