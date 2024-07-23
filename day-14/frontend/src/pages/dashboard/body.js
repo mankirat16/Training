@@ -172,6 +172,7 @@ import "react-toastify/dist/ReactToastify.css";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { UpdateContext } from "../../context";
+import FormDialog from "./editAlarmDialog";
 const socket = io("http://localhost:5000", {
   withCredentials: true,
   transports: ["websocket", "polling"],
@@ -264,6 +265,7 @@ const Body = () => {
   return (
     <Container>
       <Box display="flex" justifyContent="flex-end" mb={2} mt={4}>
+        <FormDialog/>
         <Button variant="contained" color="secondary" onClick={logout}>
           Logout
         </Button>
