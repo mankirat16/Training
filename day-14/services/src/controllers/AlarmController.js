@@ -46,4 +46,22 @@ const delAlarm = async (req, res, next) => {
     res.status(404).json("Internal server error");
   }
 };
-module.exports = { addAlarm, getAlarms, delAlarm };
+const editAlarm = async (req, res, next) => {
+  try {
+    const alarm = await Alarm.findOne({
+      where: {
+        id: req.body.id,
+      },
+    });
+    await alarm.update({
+      text: req.body.text || alarm.dataValues.text,
+      dateTime: req.body.dateTime || alarm.dataValues.dateTime,
+    });
+    console.log(alarm);
+    res.status(200).json({ ...alarm });
+  } catch (e) {
+    console.log(e);
+    res.status(404).json("Internal server");
+  }
+};
+module.exports = { addAlarm, getAlarms, delAlarm, editAlarm };

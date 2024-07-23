@@ -7,20 +7,38 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function AlarmDialog({ open, onClose, alarmData, onSave }) {
-  const [text, setText] = React.useState(alarmData?.text || "");
-  const [dateTime, setDateTime] = React.useState(alarmData?.dateTime || "");
+export default function AlarmDialog({ editDialog, setEditDialog, alarmId }) {
+  const [text, setText] = React.useState("");
+  const [dateTime, setDateTime] = React.useState("");
 
   const handleSave = () => {
-    onSave({ text, dateTime });
-    onClose();
+    axios
+      .post("http://localhost:5000/alarm/edit-alarm", {
+        id: alarmId,
+        text: text,
+        dateTime: dateTime,
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Alarm updated successfully!");
+        setEditDialog(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error("Error updating alarm. Please try again.");
+      });
+  };
+
+  const handleClose = () => {
+    setEditDialog(false);
   };
 
   return (
     <Dialog
-      open={true}
-      onClose={onClose}
+      open={editDialog}
       PaperProps={{
         component: "form",
         onSubmit: (event) => {
@@ -49,7 +67,6 @@ export default function AlarmDialog({ open, onClose, alarmData, onSave }) {
         </Box>
         <Box mb={2}>
           <TextField
-            required
             id="dateTime"
             name="dateTime"
             label="Date & Time"
@@ -64,7 +81,7 @@ export default function AlarmDialog({ open, onClose, alarmData, onSave }) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} variant="outlined">
+        <Button onClick={handleClose} variant="outlined">
           Cancel
         </Button>
         <Button type="submit" variant="contained">

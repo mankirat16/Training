@@ -182,6 +182,8 @@ const Body = () => {
   const [alarmText, setAlarmText] = useState("");
   const [alarmDateTime, setAlarmDateTime] = useState("");
   const { setIsLoggedIn, setUserId } = useContext(UpdateContext);
+  const [editDialog, setEditDialog] = useState(false);
+  const [alarmId, setAlarmId] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     fetchAlarms();
@@ -265,7 +267,11 @@ const Body = () => {
   return (
     <Container>
       <Box display="flex" justifyContent="flex-end" mb={2} mt={4}>
-        <FormDialog/>
+        <FormDialog
+          editDialog={editDialog}
+          setEditDialog={setEditDialog}
+          alarmId={alarmId}
+        />
         <Button variant="contained" color="secondary" onClick={logout}>
           Logout
         </Button>
@@ -321,7 +327,10 @@ const Body = () => {
                   <IconButton
                     edge="end"
                     aria-label="edit"
-                    // onClick={() => openEditDialog(alarm)}
+                    onClick={() => {
+                      setEditDialog(true);
+                      setAlarmId(alarm.id);
+                    }}
                   >
                     <EditIcon />
                   </IconButton>
