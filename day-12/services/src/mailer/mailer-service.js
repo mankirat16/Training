@@ -27,4 +27,4 @@ const recipients = [
 //     category: "Integration Test",
 //   })
 //   .then(console.log, console.error);
-module.exports = client ;
+module.exports = client;
